@@ -39,7 +39,7 @@ class PatientController extends Controller
     public function edit(string $id)
     {
         $patient = User::findOrFail($id);
-        return view('patient.edit', compact('patient'));
+        return view('patient.modify', compact('patient'));
     }
 
     public function update(Request $request, string $id)
