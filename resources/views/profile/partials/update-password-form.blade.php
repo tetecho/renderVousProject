@@ -1,3 +1,4 @@
+{{-- resources/views/profile/partials/update-password-form.blade.php --}}
 <section>
     <form method="post" action="{{ route('password.update') }}" class="space-y-5">
         @csrf
@@ -10,17 +11,14 @@
                 {{ __('Mot de passe actuel') }}
             </label>
             <div class="relative">
-                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-gray-100 rounded-lg
-                            flex items-center justify-center pointer-events-none">
+                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center pointer-events-none border border-gray-200">
                     <i class="fas fa-key text-gray-400 text-xs"></i>
                 </div>
                 <input id="update_password_current_password" name="current_password" type="password"
                     autocomplete="current-password"
-                    class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl text-sm
-                           focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent
-                           transition-all duration-200 bg-gray-50 focus:bg-white">
+                    class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400 transition-all duration-300 bg-gray-50 focus:bg-white">
             </div>
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1 text-xs" />
+            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1.5 text-xs" />
         </div>
 
         {{-- Nouveau mot de passe --}}
@@ -30,17 +28,14 @@
                 {{ __('Nouveau mot de passe') }}
             </label>
             <div class="relative">
-                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-emerald-50 rounded-lg
-                            flex items-center justify-center pointer-events-none">
+                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center pointer-events-none border border-emerald-100">
                     <i class="fas fa-lock text-emerald-400 text-xs"></i>
                 </div>
                 <input id="update_password_password" name="password" type="password"
                     autocomplete="new-password"
-                    class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl text-sm
-                           focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent
-                           transition-all duration-200 bg-gray-50 focus:bg-white">
+                    class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400 transition-all duration-300 bg-gray-50 focus:bg-white">
             </div>
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-1 text-xs" />
+            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-1.5 text-xs" />
         </div>
 
         {{-- Confirmation --}}
@@ -50,26 +45,21 @@
                 {{ __('Confirmer le nouveau mot de passe') }}
             </label>
             <div class="relative">
-                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-teal-50 rounded-lg
-                            flex items-center justify-center pointer-events-none">
+                <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center pointer-events-none border border-teal-100">
                     <i class="fas fa-lock text-teal-400 text-xs"></i>
                 </div>
                 <input id="update_password_password_confirmation" name="password_confirmation" type="password"
                     autocomplete="new-password"
-                    class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl text-sm
-                           focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent
-                           transition-all duration-200 bg-gray-50 focus:bg-white">
+                    class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400 transition-all duration-300 bg-gray-50 focus:bg-white">
             </div>
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-1 text-xs" />
+            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-1.5 text-xs" />
         </div>
 
         {{-- Submit --}}
         <div class="flex items-center gap-4 pt-2">
             <button type="submit"
-                class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2.5 text-sm
-                       font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105
-                       flex items-center gap-2">
-                <i class="fas fa-shield-alt"></i>
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 font-semibold text-sm">
+                <i class="fas fa-shield-alt text-xs"></i>
                 {{ __('Mettre à jour') }}
             </button>
 

@@ -52,10 +52,10 @@ class PatientController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // only update password if provided
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
         }
+        
 
         $patient->update($validated);
 

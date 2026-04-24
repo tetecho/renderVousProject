@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class MedecinController extends Controller
 {
@@ -11,7 +13,8 @@ class MedecinController extends Controller
      */
     public function index()
     {
-        //
+        $medecins = User::where('role', 'medecin')->get();
+        return view('medecin.index', compact('medecins'));
     }
 
     /**
@@ -19,7 +22,7 @@ class MedecinController extends Controller
      */
     public function create()
     {
-        //
+        return view('medecin.create');
     }
 
     /**
@@ -27,7 +30,20 @@ class MedecinController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'phone'    => 'nullable|string|max:20',
+        ]);
+
+        // Fix typo + hash password correctly
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['role'] = 'medecin';
+
+        User::create($validated);
+
+        return redirect()->route('medecin.index')->with('success', true);
     }
 
     /**
@@ -35,7 +51,8 @@ class MedecinController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $medecin = User::where('role', 'medecin')->findOrFail($id);
+        return view('medecin.show', compact('medecin'));
     }
 
     /**
@@ -43,7 +60,8 @@ class MedecinController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $medecin = User::where('role', 'medecin')->findOrFail($id);
+        return view('medecin.modify', compact('medecin'));
     }
 
     /**
@@ -51,7 +69,25 @@ class MedecinController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $medecin = User::where('role', 'medecin')->findOrFail($id);
+
+        $validated = $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id, // FIX unique on update
+            'password' => 'nullable|min:6', // FIX: not required
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $medecin->update($validated);
+
+        return redirect()->route('medecin.index')->with('success', true);
     }
 
     /**
@@ -59,6 +95,9 @@ class MedecinController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $medecin = User::where('role', 'medecin')->findOrFail($id);
+        $medecin->delete();
+
+        return redirect()->route('medecin.index')->with('success', true);
     }
 }

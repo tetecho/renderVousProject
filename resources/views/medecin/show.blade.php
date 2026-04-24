@@ -1,19 +1,19 @@
-{{-- resources/views/patients/show.blade.php --}}
+{{-- resources/views/medecins/show.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div class="space-y-3">
                 <div class="flex items-center gap-4">
                     <div class="p-4 rounded-2xl gradient-primary shadow-lg">
-                        <i class="fas fa-user-circle text-white text-2xl"></i>
+                        <i class="fas fa-user-md text-white text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{ __('Fiche patient') }}</h1>
-                        <p class="text-gray-500 mt-1">{{ __('Détails complets du patient') }}</p>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{ __('Fiche médecin') }}</h1>
+                        <p class="text-gray-500 mt-1">{{ __('Détails complets du médecin') }}</p>
                     </div>
                 </div>
             </div>
-            <a href="{{ route('patient.index') }}"
+            <a href="{{ route('medecin.index') }}"
                 class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all duration-300 hover:bg-blue-50 self-start lg:self-auto">
                 <i class="fas fa-arrow-left text-xs"></i> {{ __('Retour à la liste') }}
             </a>
@@ -22,19 +22,18 @@
 
     <div class="max-w-2xl mx-auto space-y-4">
 
-        {{-- Patient card --}}
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
              style="box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
             <div class="h-1.5 gradient-primary"></div>
 
-            {{-- Avatar + name header --}}
+            {{-- Avatar + name --}}
             <div class="px-6 py-8 flex flex-col items-center text-center border-b border-gray-100">
                 <div class="w-20 h-20 gradient-primary rounded-full flex items-center justify-center shadow-lg mb-4">
-                    <i class="fas fa-user text-white text-3xl"></i>
+                    <i class="fas fa-user-md text-white text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">{{ $patient->name }}</h2>
+                <h2 class="text-2xl font-bold text-gray-900">{{ $medecin->name }}</h2>
                 <span class="mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-600 border border-blue-100 shadow-sm">
-                    Patient #{{ str_pad($patient->id, 4, '0', STR_PAD_LEFT) }}
+                    {{ __('Médecin') }} #{{ str_pad($medecin->id, 4, '0', STR_PAD_LEFT) }}
                 </span>
             </div>
 
@@ -47,7 +46,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">{{ __('Email') }}</p>
-                        <p class="text-sm font-medium text-gray-800 mt-0.5 truncate">{{ $patient->email }}</p>
+                        <p class="text-sm font-medium text-gray-800 mt-0.5 truncate">{{ $medecin->email }}</p>
                     </div>
                 </div>
 
@@ -58,7 +57,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">{{ __('Téléphone') }}</p>
-                        <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $patient->phone ?? '—' }}</p>
+                        <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $medecin->phone ?? '—' }}</p>
                     </div>
                 </div>
 
@@ -69,19 +68,19 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">{{ __("Date d'inscription") }}</p>
-                        <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $patient->created_at->format('d/m/Y à H:i') }}</p>
+                        <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $medecin->created_at->format('d/m/Y à H:i') }}</p>
                     </div>
                 </div>
             </div>
 
             {{-- Actions --}}
             <div class="flex flex-col sm:flex-row gap-3 p-6 pt-2 border-t border-gray-100">
-                <a href="{{ route('patient.edit', $patient->id) }}"
+                <a href="{{ route('medecin.edit', $medecin->id) }}"
                     class="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 font-medium text-sm">
                     <i class="fas fa-edit text-xs"></i> {{ __('Modifier') }}
                 </a>
-                <form action="{{ route('patient.destroy', $patient->id) }}" method="POST"
-                    onsubmit="return confirm('{{ __('Supprimer définitivement ce patient ?') }}')" class="flex-1">
+                <form action="{{ route('medecin.destroy', $medecin->id) }}" method="POST"
+                    onsubmit="return confirm('{{ __('Supprimer définitivement ce médecin ?') }}')" class="flex-1">
                     @csrf @method('DELETE')
                     <button type="submit"
                         class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 font-medium text-sm">

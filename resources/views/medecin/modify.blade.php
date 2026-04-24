@@ -9,11 +9,11 @@
                     </div>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{ __('Modifier le patient') }}</h1>
-                        <p class="text-gray-500 mt-1">{{ $patient->name }}</p>
+                        <p class="text-gray-500 mt-1">{{ $medecin->name }}</p>
                     </div>
                 </div>
             </div>
-            <a href="{{ route('patient.index') }}"
+            <a href="{{ route('medecin.index') }}"
                 class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all duration-300 hover:bg-blue-50 self-start lg:self-auto">
                 <i class="fas fa-arrow-left text-xs"></i> {{ __('Retour à la liste') }}
             </a>
@@ -25,7 +25,7 @@
              style="box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
             <div class="h-1.5 gradient-primary"></div>
 
-            <form action="{{ route('patient.update', $patient->id) }}" method="POST" class="p-6 space-y-5">
+            <form action="{{ route('medecin.update', $medecin->id) }}" method="POST" class="p-6 space-y-5">
                 @csrf @method('PUT')
 
                 {{-- Nom --}}
@@ -37,7 +37,7 @@
                         <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center pointer-events-none border border-blue-100">
                             <i class="fas fa-user text-blue-400 text-xs"></i>
                         </div>
-                        <input type="text" name="name" value="{{ old('name', $patient->name) }}" required
+                        <input type="text" name="name" value="{{ old('name', $medecin->name) }}" required
                             placeholder="{{ __('Jean Dupont') }}"
                             class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-all duration-300 bg-gray-50 focus:bg-white @error('name') border-red-400 bg-red-50 @enderror">
                     </div>
@@ -57,7 +57,7 @@
                         <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center pointer-events-none border border-blue-100">
                             <i class="fas fa-envelope text-blue-400 text-xs"></i>
                         </div>
-                        <input type="email" name="email" value="{{ old('email', $patient->email) }}" required
+                        <input type="email" name="email" value="{{ old('email', $medecin->email) }}" required
                             placeholder="{{ __('jean@exemple.com') }}"
                             class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-all duration-300 bg-gray-50 focus:bg-white @error('email') border-red-400 bg-red-50 @enderror">
                     </div>
@@ -77,7 +77,7 @@
                         <div class="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center pointer-events-none border border-emerald-100">
                             <i class="fas fa-phone-alt text-emerald-400 text-xs"></i>
                         </div>
-                        <input type="tel" name="phone" value="{{ old('phone', $patient->phone) }}"
+                        <input type="tel" name="phone" value="{{ old('phone', $medecin->phone) }}"
                             placeholder="{{ __('06 12 34 56 78') }}"
                             class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-all duration-300 bg-gray-50 focus:bg-white">
                     </div>
@@ -104,7 +104,7 @@
 
                 {{-- Submit --}}
                 <div class="flex flex-col sm:flex-row gap-3 pt-3 border-t border-gray-100">
-                    <a href="{{ route('patient.index') }}"
+                    <a href="{{ route('medecin.index') }}"
                         class="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium hover:border-gray-400 text-sm">
                         <i class="fas fa-times text-xs"></i> {{ __('Annuler') }}
                     </a>

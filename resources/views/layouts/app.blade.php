@@ -1,5 +1,6 @@
+{{-- resources/views/layouts/app.blade.php --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,325 +9,320 @@
 
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
     <style>
         * { font-family: 'Inter', sans-serif; }
 
-        .gradient-bg  { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .bg-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        :root {
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
         }
 
-        /* Sidebar */
-        .sidebar { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 1000; }
-        .sidebar-item { transition: all 0.2s ease; position: relative; overflow: hidden; }
-        .sidebar-item::before {
-            content: '';
-            position: absolute; left: 0; top: 0;
-            height: 100%; width: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: scaleY(0);
-            transition: transform 0.2s ease;
+        .gradient-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
         }
-        .sidebar-item:hover::before,
-        .sidebar-item-active::before { transform: scaleY(1); }
-        .sidebar-item:hover {
-            background: linear-gradient(135deg,rgba(102,126,234,.08) 0%,rgba(118,75,162,.08) 100%);
-            transform: translateX(3px);
+        .gradient-success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
         }
+        .gradient-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+        }
+        .gradient-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(203, 213, 225, 0.5);
+            z-index: 1000;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            transition: all 0.25s ease;
+            border-radius: 12px;
+            position: relative;
+        }
+
         .sidebar-item-active {
-            background: linear-gradient(135deg,rgba(102,126,234,.12) 0%,rgba(118,75,162,.12) 100%);
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(6,182,212,0.12) 100%);
         }
 
-        /* Scrollbar */
-        .scrollbar-custom::-webkit-scrollbar { width: 4px; }
-        .scrollbar-custom::-webkit-scrollbar-track  { background: #f8f8fc; }
-        .scrollbar-custom::-webkit-scrollbar-thumb  {
-            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+        .sidebar-item-active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 70%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .sidebar-item-active .icon-wrapper {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        }
+
+        .sidebar-item-active .icon-wrapper i {
+            color: white !important;
+        }
+
+        .sidebar-item:not(.sidebar-item-active):hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 1023px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
             border-radius: 4px;
         }
 
-        /* Layout */
-        .main-content { margin-left: 280px; transition: margin-left 0.3s ease; }
-        @media (max-width: 1023px) { .main-content { margin-left: 0; } }
-
-        /* Dropdown */
-        .dropdown-menu {
-            opacity: 0; visibility: hidden;
-            transform: translateY(8px);
-            transition: all 0.2s ease;
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        /* Fade-in */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
         }
-        .animate-fadeInUp { animation: fadeInUp 0.4s ease-out both; }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.4s ease-out both;
+        }
+        .animate-slideIn {
+            animation: slideIn 0.3s ease-out both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .bg-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(59,130,246,0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(203, 213, 225, 0.5);
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-white to-indigo-50 bg-pattern min-h-screen">
+<body class="bg-gradient-to-br from-slate-50 via-white to-blue-50 bg-pattern min-h-screen">
 
-<div class="relative min-h-screen">
-
-    {{-- Mobile toggle --}}
-    <div class="fixed top-4 left-4 z-50 lg:hidden">
-        <button id="menuToggle"
-            class="p-3 bg-white rounded-xl shadow-lg text-gray-600 hover:text-indigo-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            aria-label="{{ __('Ouvrir le menu') }}">
-            <i class="fas fa-bars text-lg"></i>
-        </button>
-    </div>
+    {{-- Mobile Menu Button --}}
+    <button id="menuToggle" class="fixed top-5 left-5 z-50 lg:hidden p-3 bg-white rounded-xl shadow-lg text-gray-600 hover:text-blue-600 transition-all duration-300 hover:shadow-xl">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
 
     {{-- Overlay --}}
-    <div id="overlay"
-        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+    <div id="overlay" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden lg:hidden"></div>
 
-    {{-- ════════════════════ SIDEBAR ════════════════════ --}}
-    <aside id="sidebar"
-        class="sidebar fixed top-0 left-0 h-full w-72 bg-white shadow-2xl flex flex-col overflow-y-auto scrollbar-custom border-r border-gray-100/60">
-
+    {{-- Sidebar --}}
+    <aside id="sidebar" class="sidebar">
         {{-- Logo --}}
-        <div class="p-6 border-b border-gray-100">
+        <div class="p-6 border-b border-slate-100">
             <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center shadow-lg
-                            group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-stethoscope text-white text-xl"></i>
+                <div class="relative">
+                    <div class="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-heartbeat text-white text-xl"></i>
+                    </div>
+                    <div class="absolute -inset-1 gradient-primary rounded-2xl opacity-30 blur-sm"></div>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold gradient-text leading-tight">{{ __('Cabinet Médical') }}</h1>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ __('OFPPT · Santé & Excellence') }}</p>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">
+                        {{ __('Cabinet Medical') }}
+                    </h1>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ __('Soins & Excellence') }}</p>
                 </div>
             </a>
         </div>
 
-        {{-- Nav --}}
-        <nav class="flex-1 p-4 space-y-1">
+        {{-- Navigation --}}
+        <div class="flex-1 p-4 space-y-6 overflow-y-auto">
+            {{-- Main Menu --}}
+            <div>
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">{{ __('Menu Principal') }}</p>
+                <a href="{{ route('dashboard') }}" class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('dashboard') ? 'sidebar-item-active' : '' }}">
+                    <div class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('dashboard') ? 'gradient-primary' : 'bg-blue-50' }}">
+                        <i class="fas fa-chart-line text-sm {{ request()->routeIs('dashboard') ? 'text-white' : 'text-blue-500' }}"></i>
+                    </div>
+                    <span class="flex-1 text-sm font-medium">{{ __('Tableau de bord') }}</span>
+                </a>
+            </div>
 
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 pt-2 pb-1">
-                {{ __('Principal') }}
-            </p>
-
-            <a href="{{ route('dashboard') }}"
-                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700
-                       {{ request()->routeIs('dashboard') ? 'sidebar-item-active' : '' }}">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center
-                            {{ request()->routeIs('dashboard') ? 'gradient-bg' : 'bg-indigo-50' }}">
-                    <i class="fas fa-tachometer-alt text-sm
-                              {{ request()->routeIs('dashboard') ? 'text-white' : 'text-indigo-500' }}"></i>
-                </div>
-                <span class="flex-1 text-sm font-medium">{{ __('Tableau de bord') }}</span>
-                @if(request()->routeIs('dashboard'))
-                    <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-                @endif
-            </a>
-
-            <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700">
-                <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-calendar-check text-sm text-amber-500"></i>
-                </div>
-                <span class="flex-1 text-sm font-medium">{{ __('Rendez-vous') }}</span>
-                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">12</span>
-            </a>
-
+            {{-- Management Section --}}
             @if (Auth::user()->role === 'admin')
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 pt-4 pb-1">
-                    {{ __('Administration') }}
-                </p>
+                <div>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">{{ __('Gestion') }}</p>
 
-                <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700">
-                    <div class="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-user-md text-sm text-emerald-500"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">{{ __('Médecins') }}</span>
-                </a>
+                    <a href="{{ route('medecin.index') }}" class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('medecin.*') ? 'sidebar-item-active' : '' }}">
+                        <div class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('medecin.*') ? 'gradient-primary' : 'bg-emerald-50' }}">
+                            <i class="fas fa-user-md text-sm {{ request()->routeIs('medecin.*') ? 'text-white' : 'text-emerald-600' }}"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">{{ __('Médecins') }}</span>
+                    </a>
 
-                <a href="{{ route('patient.index') }}"
-                    class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700
-                           {{ request()->routeIs('patient.*') ? 'sidebar-item-active' : '' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center
-                                {{ request()->routeIs('patient.*') ? 'gradient-bg' : 'bg-blue-50' }}">
-                        <i class="fas fa-users text-sm
-                                  {{ request()->routeIs('patient.*') ? 'text-white' : 'text-blue-500' }}"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">{{ __('Patients') }}</span>
-                    @if(request()->routeIs('patient.*'))
-                        <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-                    @endif
-                </a>
+                    <a href="{{ route('patient.index') }}" class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('patient.*') ? 'sidebar-item-active' : '' }}">
+                        <div class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('patient.*') ? 'gradient-primary' : 'bg-blue-50' }}">
+                            <i class="fas fa-users text-sm {{ request()->routeIs('patient.*') ? 'text-white' : 'text-blue-500' }}"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">{{ __('Patients') }}</span>
+                    </a>
+
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200">
+                        <div class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50">
+                            <i class="fas fa-calendar-check text-sm text-amber-600"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">{{ __('Rendez-vous') }}</span>
+                        <span class="bg-gradient-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full">12</span>
+                    </a>
+                </div>
             @endif
 
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 pt-4 pb-1">
-                {{ __('Compte') }}
-            </p>
-
-            <a href="{{ route('profile.edit') }}"
-                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700
-                       {{ request()->routeIs('profile.*') ? 'sidebar-item-active' : '' }}">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center
-                            {{ request()->routeIs('profile.*') ? 'gradient-bg' : 'bg-purple-50' }}">
-                    <i class="fas fa-user-circle text-sm
-                              {{ request()->routeIs('profile.*') ? 'text-white' : 'text-purple-500' }}"></i>
-                </div>
-                <span class="flex-1 text-sm font-medium">{{ __('Mon profil') }}</span>
-                @if(request()->routeIs('profile.*'))
-                    <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-                @endif
-            </a>
-        </nav>
-
-        {{-- User card + dropdown --}}
-        <div class="p-4 border-t border-gray-100 relative">
-            <button id="userMenuButton"
-                class="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50
-                       transition-all duration-200 group text-left">
-                <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center shadow-md
-                            shrink-0 group-hover:scale-105 transition-transform duration-300">
-                    <i class="fas fa-user text-white text-sm"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-gray-800 text-sm truncate">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-gray-400 truncate">{{ Auth::user()->email }}</p>
-                </div>
-                <i id="dropdownArrow"
-                   class="fas fa-chevron-up text-gray-400 text-xs transition-transform duration-200"></i>
-            </button>
-
-            <div id="userDropdown"
-                class="dropdown-menu absolute bottom-full left-4 right-4 mb-2 bg-white rounded-2xl
-                       shadow-2xl border border-gray-100 overflow-hidden z-50">
-                <div class="px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-100">
-                    <p class="text-xs font-bold text-indigo-600 uppercase tracking-wide">
-                        {{ __('Mon compte') }}
-                    </p>
-                </div>
-                <a href="{{ route('profile.edit') }}"
-                   class="flex items-center space-x-3 px-4 py-3 hover:bg-indigo-50 transition-colors group">
-                    <i class="fas fa-user-circle text-gray-400 group-hover:text-indigo-600 w-4 text-sm"></i>
-                    <span class="text-sm text-gray-700 group-hover:text-indigo-700 font-medium">
-                        {{ __('Mon profil') }}
-                    </span>
+            {{-- Account Section --}}
+            <div>
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">{{ __('Mon Espace') }}</p>
+                <a href="{{ route('profile.edit') }}" class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('profile.*') ? 'sidebar-item-active' : '' }}">
+                    <div class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('profile.*') ? 'gradient-primary' : 'bg-purple-50' }}">
+                        <i class="fas fa-user-circle text-sm {{ request()->routeIs('profile.*') ? 'text-white' : 'text-purple-500' }}"></i>
+                    </div>
+                    <span class="flex-1 text-sm font-medium">{{ __('Mon profil') }}</span>
                 </a>
-                <div class="border-t border-gray-100 mx-3"></div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50
-                               transition-colors group">
-                        <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-red-500 w-4 text-sm"></i>
-                        <span class="text-sm text-gray-700 group-hover:text-red-600 font-medium">
-                            {{ __('Déconnexion') }}
-                        </span>
-                    </button>
-                </form>
+            </div>
+        </div>
+
+        {{-- User Profile --}}
+        <div class="p-4 border-t border-slate-100 mt-auto">
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="w-full flex items-center space-x-3 p-2.5 rounded-xl hover:bg-slate-50 transition-all duration-200">
+                    <div class="relative">
+                        <img class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-lg" src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=3b82f6&color=fff&rounded=true&bold=true" alt="Profile">
+                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full shadow-sm"></div>
+                    </div>
+                    <div class="flex-1 min-w-0 text-left">
+                        <p class="text-sm font-semibold text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-200" :class="{'rotate-180': open}"></i>
+                </button>
+
+                <div x-show="open" @click.outside="open = false" x-transition.opacity.duration.200ms
+                    class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+                    <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+                        <i class="fas fa-user-cog text-gray-400 w-4 text-sm"></i>
+                        <span class="text-sm text-gray-700 font-medium">{{ __('Paramètres') }}</span>
+                    </a>
+                    <div class="border-t border-slate-100"></div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50 transition-colors">
+                            <i class="fas fa-sign-out-alt text-gray-400 group-hover:text-red-500 w-4 text-sm"></i>
+                            <span class="text-sm text-gray-700 group-hover:text-red-600 font-medium">{{ __('Déconnexion') }}</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </aside>
 
-    {{-- ════════════════════ MAIN ════════════════════ --}}
-    <main class="main-content min-h-screen flex flex-col">
-
-        {{-- Top bar --}}
-        <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    {{-- Main Content --}}
+    <main class="main-content">
+        <header class="sticky top-0 z-30 glass-effect shadow-sm">
             <div class="px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex items-center justify-between gap-4">
-                    <div class="w-8 lg:hidden shrink-0"></div>
-
-                    <div class="flex-1 min-w-0 animate-fadeInUp">
+                    <div class="flex-1 min-w-0 animate-fadeIn">
                         @isset($header)
                             {{ $header }}
                         @else
-                            <h2 class="text-xl font-bold gradient-text">{{ __('Tableau de bord') }}</h2>
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">{{ __('Tableau de bord') }}</h2>
+                            <p class="text-sm text-gray-500 mt-0.5">{{ now()->translatedFormat('l d F Y') }}</p>
                         @endisset
-                        <p class="text-xs text-gray-400 mt-0.5 hidden sm:block">
-                            {{ now()->translatedFormat('l d F Y') }}
-                        </p>
                     </div>
-
                     <div class="flex items-center space-x-2 shrink-0">
-                        
-                        <button class="relative p-2.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50
-                                       rounded-xl transition-all duration-300"
-                            title="{{ __('Notifications') }}">
-                            <i class="fas fa-bell text-base"></i>
-                            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                        <button class="relative p-2.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-300">
+                            <i class="far fa-bell text-lg"></i>
+                            <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 gradient-danger rounded-full animate-pulse"></span>
                         </button>
                     </div>
                 </div>
             </div>
         </header>
 
-        {{-- Page content --}}
-        <div class="flex-1 p-4 sm:p-6 lg:p-8 animate-fadeInUp">
+        <div class="flex-1 p-4 sm:p-6 lg:p-8 animate-fadeIn">
             {{ $slot }}
         </div>
 
-        {{-- Footer --}}
-        <footer class="px-6 py-4 border-t border-gray-100 text-center">
-            <p class="text-xs text-gray-400">
-                &copy; {{ date('Y') }} &mdash; {{ __('Cabinet Médical · OFPPT') }}
-            </p>
+        <footer class="px-6 py-5 border-t border-slate-100 text-center">
+            <p class="text-xs text-gray-400">&copy; {{ date('Y') }} {{ __('Cabinet Medical — Tous droits réservés') }}</p>
         </footer>
     </main>
-</div>
 
-<script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar    = document.getElementById('sidebar');
-    const overlay    = document.getElementById('overlay');
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
 
-    const closeSidebar = () => {
-        sidebar?.classList.add('-translate-x-full');
-        overlay?.classList.add('hidden');
-        document.body.style.overflow = '';
-    };
-    const openSidebar = () => {
-        sidebar?.classList.remove('-translate-x-full');
-        overlay?.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    };
+        if (menuToggle && sidebar && overlay) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('hidden');
+                document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+            });
 
-    menuToggle?.addEventListener('click', () =>
-        sidebar?.classList.contains('-translate-x-full') ? openSidebar() : closeSidebar()
-    );
-    overlay?.addEventListener('click', closeSidebar);
-
-    window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1024) {
-            sidebar?.classList.remove('-translate-x-full');
-            overlay?.classList.add('hidden');
-            document.body.style.overflow = '';
-        } else {
-            sidebar?.classList.add('-translate-x-full');
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
         }
-    });
-
-    if (window.innerWidth < 1024) sidebar?.classList.add('-translate-x-full');
-
-    // User dropdown
-    const userMenuButton = document.getElementById('userMenuButton');
-    const userDropdown   = document.getElementById('userDropdown');
-    const dropdownArrow  = document.getElementById('dropdownArrow');
-
-    userMenuButton?.addEventListener('click', e => {
-        e.stopPropagation();
-        const open = userDropdown.classList.toggle('show');
-        if (dropdownArrow) dropdownArrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
-    document.addEventListener('click', e => {
-        if (!userMenuButton?.contains(e.target) && !userDropdown?.contains(e.target)) {
-            userDropdown?.classList.remove('show');
-            if (dropdownArrow) dropdownArrow.style.transform = 'rotate(0deg)';
-        }
-    });
-</script>
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
