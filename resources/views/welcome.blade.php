@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,8 +134,39 @@
                     </a>
                 </div>
                 
+                @php
+                    $localeLabels = [
+                        'fr' => 'Français',
+                        'en' => 'English',
+                        'es' => 'Español',
+                        'ar' => 'العربية',
+                    ];
+                    $currentLocale = app()->getLocale();
+                @endphp
+
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="languageToggle"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-all duration-300 font-semibold text-sm">
+                            <i class="fas fa-language"></i>
+                            <span>{{ $localeLabels[$currentLocale] ?? strtoupper($currentLocale) }}</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="languageMenu"
+                            class="hidden absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                            @foreach($localeLabels as $localeCode => $localeLabel)
+                                <a href="{{ route('locale.switch', $localeCode) }}"
+                                    class="flex items-center justify-between px-4 py-2.5 text-sm transition-colors {{ $currentLocale === $localeCode ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+                                    <span>{{ $localeLabel }}</span>
+                                    @if($currentLocale === $localeCode)
+                                        <i class="fas fa-check text-xs"></i>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}" 
@@ -620,5 +651,22 @@
         </div>
     </footer>
 
+    <script>
+        const languageToggle = document.getElementById('languageToggle');
+        const languageMenu = document.getElementById('languageMenu');
+
+        if (languageToggle && languageMenu) {
+            languageToggle.addEventListener('click', function (event) {
+                event.stopPropagation();
+                languageMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!languageMenu.contains(event.target) && event.target !== languageToggle) {
+                    languageMenu.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

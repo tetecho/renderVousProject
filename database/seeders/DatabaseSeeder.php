@@ -17,12 +17,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Comptes par defaut pour la demonstration
+        User::factory()->create([
+            'name' => 'Admin Cabinet',
+            'email' => 'admin@cabinet.test',
+            'role' => 'admin',
+        ]);
 
-        User::factory(5)->create(['role' => 'patient']);
+        User::factory()->create([
+            'name' => 'Patient Test',
+            'email' => 'patient@cabinet.test',
+            'role' => 'patient',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Medecin Test',
+            'email' => 'medecin@cabinet.test',
+            'role' => 'medecin',
+        ]);
+
+        // Jeu de donnees minimal: 10 utilisateurs
+        User::factory(4)->create(['role' => 'patient']);
         User::factory(3)->create(['role' => 'medecin']);
         Service::factory(5)->create();
 
+        // Jeu de donnees minimal: 20 rendez-vous
         RendezVous::factory(20)->create();
     }
 }

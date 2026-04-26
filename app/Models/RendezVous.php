@@ -18,6 +18,9 @@ class RendezVous extends Model
         'statut',
     ];
 
+    protected $casts = [
+        'date_heure' => 'datetime',
+    ];
 
     public function patient()
     {
@@ -27,5 +30,10 @@ class RendezVous extends Model
     public function medecin()
     {
         return $this->belongsTo(User::class, 'medecin_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 }
