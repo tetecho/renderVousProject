@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MedecinController;
@@ -20,9 +21,8 @@ Route::get('/locale/{locale}', function (Request $request, string $locale) {
     return redirect()->back();
 })->name('locale.switch');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,22 +31,30 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->prefix('patient')->group(function () {
-    Route::get('/',[PatientController::class, 'index'])->name('patient.index');
-    Route::post('/',[PatientController::class, 'store'])->name('patient.store');
-    Route::get('/create',[PatientController::class, 'create'])->name('patient.create');
-    Route::get('/{id}',[PatientController::class, 'show'])->name('patient.show');
-    Route::get('/{id}/edit',[PatientController::class, 'edit'])->name('patient.edit');
-    Route::put('/{id}',[PatientController::class, 'update'])->name('patient.update');
-    Route::delete('/{id}',[PatientController::class, 'destroy'])->name('patient.destroy');
+    Route::get('/', [PatientController::class, 'index'])->name('patient.index');
+    Route::post('/', [PatientController::class, 'store'])->name('patient.store');
+    Route::get('/create', [PatientController::class, 'create'])->name('patient.create');
+    Route::get('/{id}', [PatientController::class, 'show'])->name('patient.show');
+    Route::get('/{id}/edit', [PatientController::class, 'edit'])->name('patient.edit');
+    Route::put('/{id}', [PatientController::class, 'update'])->name('patient.update');
+    Route::delete('/{id}', [PatientController::class, 'destroy'])->name('patient.destroy');
+});
+Route::middleware('auth')->prefix('service')->group(function () {
+    Route::get('/', [ServiceController::class, 'index'])->name('service.index');
+    Route::post('/', [ServiceController::class, 'store'])->name('service.store');
+    Route::get('/{id}', [ServiceController::class, 'show'])->name('service.show');
+    Route::get('/{id}/edit', [ServiceController::class, 'edit'])->name('service.edit');
+    Route::put('/{id}', [ServiceController::class, 'update'])->name('service.update');
+    Route::delete('/{id}', [ServiceController::class, 'destroy'])->name('service.destroy');
 });
 Route::middleware('auth')->prefix('medecin')->group(function () {
-    Route::get('/',[MedecinController::class, 'index'])->name('medecin.index');
-    Route::post('/',[MedecinController::class, 'store'])->name('medecin.store');
-    Route::get('/create',[MedecinController::class, 'create'])->name('medecin.create');
-    Route::get('/{id}',[MedecinController::class, 'show'])->name('medecin.show');
-    Route::get('/{id}/edit',[MedecinController::class, 'edit'])->name('medecin.edit');
-    Route::put('/{id}',[MedecinController::class, 'update'])->name('medecin.update');
-    Route::delete('/{id}',[MedecinController::class, 'destroy'])->name('medecin.destroy');
+    Route::get('/', [MedecinController::class, 'index'])->name('medecin.index');
+    Route::post('/', [MedecinController::class, 'store'])->name('medecin.store');
+    Route::get('/create', [MedecinController::class, 'create'])->name('medecin.create');
+    Route::get('/{id}', [MedecinController::class, 'show'])->name('medecin.show');
+    Route::get('/{id}/edit', [MedecinController::class, 'edit'])->name('medecin.edit');
+    Route::put('/{id}', [MedecinController::class, 'update'])->name('medecin.update');
+    Route::delete('/{id}', [MedecinController::class, 'destroy'])->name('medecin.destroy');
 });
 
 Route::middleware('auth')->prefix('rendezvous')->group(function () {

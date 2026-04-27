@@ -7,59 +7,87 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * Afficher la liste de toutes les spécialités
      */
     public function index()
     {
-        //
+        $services = Service::orderBy('nom', 'asc')->get();
+        return view('services.index', compact('services'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Afficher le formulaire de création
      */
     public function create()
     {
-        //
+        // return view('services.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistrer une nouvelle spécialité
      */
     public function store(Request $request)
     {
-        //
+        // Validation des données
+        $validated = $request->validate([
+            'nom' => 'required',
+        ]);
+
+        // Création de la spécialité
+        Service::create($validated);
+
+        return redirect()->route('service.index')
+            ->with('success', 'Spécialité ajoutée avec succès');
     }
 
     /**
-     * Display the specified resource.
+     * Afficher les détails d'une spécialité
      */
     public function show(Service $service)
     {
-        //
+        return view('services.show', compact('service'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Afficher le formulaire d'édition
      */
-    public function edit(Service $service)
+    public function edit(string $id)
     {
-        //
+        $service = Service::find($id);
+        return view('services.edit', compact('service'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mettre à jour une spécialité
      */
-    public function update(Request $request, Service $service)
+    public function update(Request $request, string $id)
     {
-        //
+        // Validation des données
+        $validated = $request->validate([
+            'nom' => 'required',
+        ]);
+        $Service = Service::find($id);
+
+        // Mise à jour de la spécialité
+        $Service->update($validated);
+
+        return redirect()->route('service.index')
+            ->with('success', 'Spécialité mise à jour avec succès');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer une spécialité
      */
-    public function destroy(Service $service)
+    public function destroy(string $id)
     {
-        //
+        // Vérifier si la spécialité est utilisée par un médecin
+        $service = Service::findOrFail($id);
+
+        $service->delete();
+
+        return redirect()->route('service.index')
+            ->with('success', 'Spécialité supprimée avec succès');
     }
 }

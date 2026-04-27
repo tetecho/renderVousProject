@@ -27,11 +27,11 @@ class RendezVousController extends Controller
             $user
         )
             ->orderBy('date_heure', 'desc')
-            ->get();
+            ->paginate(5);
 
         $patients = $user->isAdmin()
-            ? User::where('role', 'patient')->get()
-            : User::whereKey($user->id)->get();
+            ? User::where('role', 'patient')->paginate(5)
+            : User::whereKey($user->id)->paginate(5);
         $medecins = User::where('role', 'medecin')->get();
         $services = Service::all();
 

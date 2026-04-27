@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', __('Cabinet Médical')) }}</title>
-
+    @vite(['resources/js/app.js'])
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
@@ -282,7 +282,8 @@
             {{-- Main Menu --}}
             <div>
                 <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">
-                    {{ __('Menu Principal') }}</p>
+                    {{ __('Menu Principal') }}
+                </p>
                 <a href="{{ route('dashboard') }}"
                     class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('dashboard') ? 'sidebar-item-active' : '' }}">
                     <div
@@ -300,7 +301,8 @@
                             class="fas fa-calendar-check text-sm {{ request()->routeIs('rendezvous.*') ? 'text-white' : 'text-amber-600' }}"></i>
                     </div>
                     <span class="flex-1 text-sm font-medium">{{ __('Rendez-vous') }}</span>
-                    <span class="bg-gradient-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ \App\Models\RendezVous::where('statut', 'en_attente')->count() }}</span>
+                    <span
+                        class="bg-gradient-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ \App\Models\RendezVous::where('statut', 'en_attente')->count() }}</span>
                 </a>
             </div>
 
@@ -402,7 +404,8 @@
                         @else
                             <h2
                                 class="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                                {{ __('Tableau de bord') }}</h2>
+                                {{ __('Tableau de bord') }}
+                            </h2>
                             <p class="text-sm text-gray-500 mt-0.5">{{ now()->translatedFormat('l d F Y') }}</p>
                         @endisset
                     </div>
@@ -424,7 +427,8 @@
                                 <i class="fas fa-chevron-down text-xs transition-transform duration-200"
                                     :class="{'rotate-180': openTopLanguage}"></i>
                             </button>
-                            <div x-show="openTopLanguage" @click.outside="openTopLanguage = false" x-transition.opacity.duration.200ms
+                            <div x-show="openTopLanguage" @click.outside="openTopLanguage = false"
+                                x-transition.opacity.duration.200ms
                                 class="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
                                 @foreach($localeLabels as $localeCode => $localeLabel)
                                     <a href="{{ route('locale.switch', $localeCode) }}"

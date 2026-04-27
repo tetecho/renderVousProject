@@ -13,7 +13,7 @@ class MedecinController extends Controller
      */
     public function index()
     {
-        $medecins = User::where('role', 'medecin')->get();
+        $medecins = User::where('role', 'medecin')->paginate(5);
         return view('medecin.index', compact('medecins'));
     }
 
