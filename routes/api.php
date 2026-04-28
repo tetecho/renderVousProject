@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\ServiceController;
 use App\Models\RendezVous;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -68,3 +69,5 @@ Route::post('/rendezvous', function (Request $request) {
         201
     );
 });
+
+Route::get('/services/search', [ServiceController::class, 'search'])->middleware('auth:sanctum');

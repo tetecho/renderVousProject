@@ -5,6 +5,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MedecinController;
 use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,6 @@ Route::get('/locale/{locale}', function (Request $request, string $locale) {
     if (in_array($locale, $availableLocales, true)) {
         $request->session()->put('locale', $locale);
     }
-
     return redirect()->back();
 })->name('locale.switch');
 
@@ -39,14 +39,18 @@ Route::middleware('auth')->prefix('patient')->group(function () {
     Route::put('/{id}', [PatientController::class, 'update'])->name('patient.update');
     Route::delete('/{id}', [PatientController::class, 'destroy'])->name('patient.destroy');
 });
+
 Route::middleware('auth')->prefix('service')->group(function () {
     Route::get('/', [ServiceController::class, 'index'])->name('service.index');
     Route::post('/', [ServiceController::class, 'store'])->name('service.store');
     Route::get('/{id}', [ServiceController::class, 'show'])->name('service.show');
+    // FIXED: was /edit/{id} which caused route conflict with /{id} — Laravel matched /{id} first
+    // so route('service.edit', $id) generated /service/edit/2 which hit /{id} with id='edit'
     Route::get('/{id}/edit', [ServiceController::class, 'edit'])->name('service.edit');
     Route::put('/{id}', [ServiceController::class, 'update'])->name('service.update');
     Route::delete('/{id}', [ServiceController::class, 'destroy'])->name('service.destroy');
 });
+
 Route::middleware('auth')->prefix('medecin')->group(function () {
     Route::get('/', [MedecinController::class, 'index'])->name('medecin.index');
     Route::post('/', [MedecinController::class, 'store'])->name('medecin.store');

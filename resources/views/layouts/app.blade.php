@@ -307,6 +307,7 @@
             </div>
 
             {{-- Management Section --}}
+            {{-- Management Section --}}
             @if (Auth::user()->role === 'admin')
                 <div>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">{{ __('Gestion') }}
@@ -320,6 +321,16 @@
                                 class="fas fa-user-md text-sm {{ request()->routeIs('medecin.*') ? 'text-white' : 'text-emerald-600' }}"></i>
                         </div>
                         <span class="flex-1 text-sm font-medium">{{ __('Médecins') }}</span>
+                    </a>
+
+                    <a href="{{ route('service.index') }}"
+                        class="sidebar-item flex items-center space-x-3 px-3 py-2.5 rounded-xl text-gray-700 transition-all duration-200 {{ request()->routeIs('service.*') ? 'sidebar-item-active' : '' }}">
+                        <div
+                            class="icon-wrapper w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('service.*') ? 'gradient-primary' : 'bg-purple-50' }}">
+                            <i
+                                class="fas fa-stethoscope text-sm {{ request()->routeIs('service.*') ? 'text-white' : 'text-purple-600' }}"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">{{ __('Spécialités') }}</span>
                     </a>
 
                     <a href="{{ route('patient.index') }}"

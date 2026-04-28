@@ -4,90 +4,83 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ServiceController extends Controller
 {
-
-    /**
-     * Afficher la liste de toutes les spécialités
-     */
     public function index()
     {
-        $services = Service::orderBy('nom', 'asc')->get();
+        $services = Service::orderBy('name', 'asc')->get();
         return view('services.index', compact('services'));
     }
 
-    /**
-     * Afficher le formulaire de création
-     */
-    public function create()
-    {
-        // return view('services.create');
-    }
-
-    /**
-     * Enregistrer une nouvelle spécialité
-     */
     public function store(Request $request)
     {
-        // Validation des données
         $validated = $request->validate([
-            'nom' => 'required',
+            'name' => 'required|string|max:255|unique:services,name',
         ]);
 
-        // Création de la spécialité
         Service::create($validated);
 
         return redirect()->route('service.index')
-            ->with('success', 'Spécialité ajoutée avec succès');
+            ->with('success', __('Spécialité ajoutée avec succès'));
     }
 
-    /**
-     * Afficher les détails d'une spécialité
-     */
-    public function show(Service $service)
+    public function show(string $id)
     {
+        $service = Service::findOrFail($id);
         return view('services.show', compact('service'));
     }
-
-    /**
-     * Afficher le formulaire d'édition
-     */
     public function edit(string $id)
     {
-        $service = Service::find($id);
-        return view('services.edit', compact('service'));
+        $service = Service::findOrFail($id);
+        return view('services.modify', compact('service'));
     }
 
-    /**
-     * Mettre à jour une spécialité
-     */
     public function update(Request $request, string $id)
     {
-        // Validation des données
         $validated = $request->validate([
-            'nom' => 'required',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('services', 'name')->ignore($id),
+            ],
         ]);
-        $Service = Service::find($id);
 
-        // Mise à jour de la spécialité
-        $Service->update($validated);
+        $service = Service::findOrFail($id);
+        $service->update($validated);
 
         return redirect()->route('service.index')
-            ->with('success', 'Spécialité mise à jour avec succès');
+            ->with('success', __('Spécialité mise à jour avec succès'));
     }
 
-    /**
-     * Supprimer une spécialité
-     */
     public function destroy(string $id)
     {
-        // Vérifier si la spécialité est utilisée par un médecin
         $service = Service::findOrFail($id);
+
+        if ($service->rendez_vous()->exists()) {
+            return redirect()->route('service.index')
+                ->with('error', __('Impossible de supprimer cette spécialité car elle est liée à des rendez-vous.'));
+        }
 
         $service->delete();
 
         return redirect()->route('service.index')
-            ->with('success', 'Spécialité supprimée avec succès');
+            ->with('success', __('Spécialité supprimée avec succès'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = Service::query();
+
+        if ($request->filled('search')) {
+            $term = $request->search;
+            $query->where('name', 'like', "%{$term}%");
+        }
+
+        return response()->json(
+            $query->orderBy('name', 'asc')->get()
+        );
     }
 }
